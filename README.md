@@ -7,3 +7,8 @@ Esta aplicación crea una página web con un formulario que permite buscar en fa
 Hay que ejecutar el fichero Python mediante el comando
 
 `python create_json.py <RUTA_CSV> <RUTA_JSON>`
+
+
+python3 code/create_json.py code/BIBREC23.csv js/bibrec23.json
+
+clear

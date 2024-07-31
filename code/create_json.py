@@ -3,12 +3,10 @@ import pandas as pd
 
 if __name__ == "__main__":
     assert len(sys.argv) > 1, "Debe introducir la ruta del fichero de origen."
-    assert len(sys.argv) > 2, "Debe introducir la ruta del fichero de destino."
 
-    filepath_origen = sys.argv[1]
-    filepath_destino = sys.argv[1]
+    filepath = sys.argv[1]
 
-    data = pd.read_csv(filepath_origen)
+    data = pd.read_csv(filepath)
     data['Ordenar'] = data['Centro'].str.lower()
     data = data.sort_values(['Ordenar','Titulacion','Codigo'])
     columnas_buenas = data[['Centro','Titulacion','Codigo','Asignatura']]
@@ -25,5 +23,5 @@ if __name__ == "__main__":
                 res[centro][titulacion] = [{'ca':codigo,'da':asignatura}]
             else:
                 res[centro][titulacion].append({'ca':codigo,'da':asignatura})
-    with open(filepath_destino,'w',encoding='utf8') as f:
+    with open('./code/bibrec24.json','w',encoding='utf8') as f:
         json.dump(res,f)
