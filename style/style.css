@@ -1,0 +1,233 @@
+@import url('https://fonts.googleapis.com/css?family=Poppins:200i,400&display=swap');
+
+:root {
+    --color-white: #ffffff;
+    --color-darkblue: #1b1b32;
+    --color-darkblue-alpha: rgba(27, 27, 50, 0.8);
+    --color-green: #37af65;
+    --rojo-texto: #8c0707;
+    --rojo-encabezado: #c00000;
+  }
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.4;
+    margin: 0;
+    color: var(--color-white);
+}
+
+/* mobile friendly alternative to using background-attachment: fixed */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    z-index: -1;
+    background: var(--color-white);
+    /*background-image: linear-gradient(
+        115deg,
+        rgba(58, 58, 158, 0.8),
+        rgba(136, 136, 206, 0.7)
+      ),
+      url(portada.jpg);*/
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+
+h1 {
+    margin: 0;
+    color: var(--color-white);
+    width: 60%;
+    margin: 5% auto;
+    text-align: center;
+    font-weight: 400;
+    line-height: 1.2;
+    font-size: min(5vw, 1.2em);
+}
+
+
+#logo {
+    width: max(200px, 18vw);
+    background-color: var(--color-white);
+    /*aspect-ratio: 35 / 4;*/
+    padding: 0.4rem;
+    height: 100px;
+}
+
+header {
+    background-color: #FFFFFF;
+    background-image: url('../imagenes/bibrec_wide.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    width: 100%;
+    height: 69px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    top: 0;
+}
+
+form {
+    width: 40%;
+    min-width: 300px;
+    margin: 8% auto;
+    background: var(--color-white);
+    padding: 2.5rem 0.625rem;
+    border-radius: 0.25rem;
+}
+
+select:first-child {
+    margin-top: 0;
+}
+
+select {
+    display: block;
+    margin: 40px auto;
+    width: 100%;
+    text-align: center;
+    border-radius: 5px;
+    height: 4vh;
+    color: #495057;
+    background-color: #fff;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+
+}
+
+button {
+    display: inline-block;
+    width: 49%;
+    height: 30px;
+    border: none;
+    border-radius: 5px;
+    color: inherit;
+    cursor: pointer;
+}
+
+.consultar {
+    background-color: rgba(140, 7, 7, 0.95);
+}
+
+.limpiar {
+    background-color: rgba(136, 136, 136, 0.7);
+}
+
+p { 
+    padding-top: 2.5rem;
+    font-size: 1.125rem;
+    margin: 0 auto;
+    width: 100%;
+    text-align: center;
+    color: var(--rojo-texto);
+}
+
+button,
+select {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;  
+}
+
+label{
+    color: black;
+}
+
+.center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+  }
+
+
+.footer{
+  width: 100%;
+  background-color: #888888;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+  .main-buttons {
+    width: 100%;
+    height: inherit;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    margin: auto;
+    cursor: pointer;
+  }
+
+
+  .button {
+    background-color: #c69810;
+    color: black;
+    padding: 10px 20px;
+    margin: 10px;
+    text-align: center;
+    border-radius: 5px;
+    flex-basis: calc(20% - 20px);
+    font-family: inherit;
+    font-size: inherit;
+    cursor: pointer;
+  }
+
+  @media only screen and (max-width: 900px) {
+    .button {
+      flex-basis: calc(80% - 20px);
+    }
+  }
+
+
+
+  @media only screen and (max-width: 600px) {
+    header {
+      background-color: #FFFFFF;
+      background-image: url('../imagenes/bibrec_narrow.png');
+      background-position: center;
+      background-repeat: no-repeat;
+      width: 100%;
+      height: 69px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: fixed;
+      top: 0;
+  }
+
+  form{
+    min-width: 80%;
+  }
+
+  .footer {
+    flex-wrap: wrap;
+    background-color: #888888;
+  }
+
+  }
+
+
+  @media only screen and (max-width: 425px) {
+    .footer {
+      flex-direction: column;
+    }
+    .button {
+      flex-basis: 100%;
+    }
+  }
+
+
+label {
+ padding-bottom: 50px;
+}
