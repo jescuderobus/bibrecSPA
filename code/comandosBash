@@ -3,3 +3,4 @@ awk -F ',' 'NR == 1 { for (i = 1; i <= NF; i++) { if ($i == "\"Centro\"") centro
 (El procesado del fichero de entrada es más sencillo con el OpenOffice)
 
 
+python code/create_json.py code/BIBREC23.csv code/bibrec23.json

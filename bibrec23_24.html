@@ -1,0 +1,132 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>BibRec. Bibliografía Recomendada 2022</title>
+    <link rel="stylesheet" href="style/style.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </head>
+
+  <body>
+
+
+    <header>
+        <map name="logo-bibus">
+          <area shape="rect" coords="0,0,140,69" alt="logo" href="https://bib.us.es/" style="outline:none;" target="_blank">
+        </map>
+    </header>
+
+    <form name="bibrec" id="bibRec">
+        <p>Accede a bibliografía recomendada en Fama, extraída  de las guías docentes de la US.</p>
+        <select name="optone" id="centroSel" size="1" aria-label="Selecciona ya" required>
+            <option value="" selected="selected">Selecciona tu centro</option>
+        </select>
+    
+        <select name="opttwo" id="titulacionSel" size="1" required>
+            <option value="" selected="selected">Por favor, selecciona el centro primero</option>
+        </select>
+    
+        <select name="optthree" id="asignaturaSel" size="1" required>
+            <option value="" selected="selected">Por favor, selecciona la titulación primero</option>
+        </select>
+
+      <span style="display: inline;">
+        <label><input type="checkbox" id="cboxElec"> Mostrar sólo recursos electrónicos</label><br><br>
+        <button onclick="clearSel();" class="limpiar">Limpiar</button>
+        <button onclick="goSel(asignaturaSel.value,cboxElec.checked)" class="consultar" aria-label="Consultar, o selecciona limpiar para hacer otra elección">Consultar</button>
+      </span>
+        
+    </form>
+  <script src="js/bibrec23_24.js"></script>
+
+<script>
+function goSel(val,elec){
+    if(elec){
+      var url_fama='https://fama.us.es/discovery/search?query=any,contains,'+val+'&tab=all_data_not_idus&search_scope=all_data_not_idus&vid=34CBUA_US:VU1&facet=tlevel,include,online_resources&offset=0';
+    } else{
+      var url_fama='https://fama.us.es/discovery/search?query=any,contains,'+val+'&tab=all_data_not_idus&search_scope=all_data_not_idus&vid=34CBUA_US:VU1&lang=es&offset=0';
+    }
+    //alert(val+"---"+elec);
+    if (!val) {
+      // strValue was empty string, false, 0, null, undefined, ...
+      clearSel();
+    } else{
+      window.open(url_fama, '_blank');
+    }
+    
+}
+
+function clearSel(){
+    centroSel.length = 1; // remove all options bar first
+    titulacionSel.length = 1; // remove all options bar first
+    asignaturaSel.length = 1; // remove all options bar first
+    window.onload();
+}
+
+window.onload = function () {
+    var centroSel = document.getElementById("centroSel"),
+        titulacionSel = document.getElementById("titulacionSel"),
+        asignaturaSel = document.getElementById("asignaturaSel");
+    for (var centro in asigObject) {
+        centroSel.options[centroSel.options.length] = new Option(centro, centro);
+    }
+    centroSel.onchange = function () {
+        titulacionSel.length = 1; // remove all options bar first
+        asignaturaSel.length = 1; // remove all options bar first
+        if (this.selectedIndex < 1) {
+          titulacionSel.options[0].text = "Por Favor, selecciona el centro primero"
+          asignaturaSel.options[0].text = "Por Favor, selecciona la titulación primero"
+          return; // done   
+        }  
+        titulacionSel.options[0].text = "Por Favor, selecciona la titulación"
+        for (var titulacion in asigObject[this.value]) {
+            titulacionSel.options[titulacionSel.options.length] = new Option(titulacion, titulacion);
+        }
+        if (titulacionSel.options.length==2) {
+          titulacionSel.selectedIndex=1;
+          titulacionSel.onchange();
+        }  
+    }
+
+    centroSel.onchange(); // reset in case page is reloaded
+    titulacionSel.onchange = function () {
+        asignaturaSel.length = 1; // remove all options bar first
+        if (this.selectedIndex < 1) {
+          asignaturaSel.options[0].text = "Por Favor, selecciona la titulación primero"
+          return; // done   
+        }  
+        asignaturaSel.options[0].text = "Por Favor, selecciona la asignatura"
+        
+        var asignaturas = asigObject[centroSel.value][this.value];
+        
+        for (var i = 0; i < asignaturas.length; i++) {
+            // Option (cadena indicativa, value)
+            asignaturaSel.options[asignaturaSel.options.length] = new Option(asignaturas[i]["da"], '('+asignaturas[i]["ca"]+') '+asignaturas[i]["da"]);
+        }
+
+        if (asignaturaSel.options.length==2) {
+          asignaturaSel.selectedIndex=1;
+          asignaturaSel.onchange();
+        }  
+        
+    }
+}
+
+</script>
+
+<!-- Estadísticas GA4 -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-8DFZHHVH7F"></script>
+<script> window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'G-8DFZHHVH7F'); </script>
+
+
+<footer class="footer">
+  <div class="button" onclick="window.open('https://bib.us.es')">Web de la Biblioteca</div>
+  <div class="button" onclick="window.open('https://bib.us.es/utiliza_la_biblioteca/tramites')">Solicitud de compra</div>
+  <div class="button" onclick="window.open('https://bib.us.es/busca_y_encuentra/incidencias_br')">Contacto</div>
+  <div class="button" onclick="window.open('https://bib.us.es/busca_y_encuentra/ayuda_bibrec')">Ayuda</div>
+</footer>
+
+
+</body>
+</html>

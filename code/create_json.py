@@ -23,5 +23,5 @@ if __name__ == "__main__":
                 res[centro][titulacion] = [{'ca':codigo,'da':asignatura}]
             else:
                 res[centro][titulacion].append({'ca':codigo,'da':asignatura})
-    with open('./code/bibrec24.json','w',encoding='utf8') as f:
+    with open('./code/bibrec23.json','w',encoding='utf8') as f:
         json.dump(res,f)
