@@ -106,6 +106,8 @@
         var centroSel = document.getElementById("centroSel"),
           titulacionSel = document.getElementById("titulacionSel"),
           asignaturaSel = document.getElementById("asignaturaSel");
+
+
         for (var centro in asigObject) {
           centroSel.options[centroSel.options.length] = new Option(
             centro,
@@ -115,6 +117,9 @@
         centroSel.onchange = function () {
           titulacionSel.length = 1; // remove all options bar first
           asignaturaSel.length = 1; // remove all options bar first
+          
+          document.getElementById("curso").innerHTML = "";
+
           if (this.selectedIndex < 1) {
             titulacionSel.options[0].text =
               "Por Favor, selecciona el centro primero";
@@ -138,6 +143,9 @@
         centroSel.onchange(); // reset in case page is reloaded
         titulacionSel.onchange = function () {
           asignaturaSel.length = 1; // remove all options bar first
+
+          document.getElementById("curso").innerHTML = "";
+          
           if (this.selectedIndex < 1) {
             asignaturaSel.options[0].text =
               "Por Favor, selecciona la titulación primero";
