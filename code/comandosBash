@@ -1,6 +1,5 @@
-awk -F ',' 'NR == 1 { for (i = 1; i <= NF; i++) { if ($i == "\"Centro\"") centro = i; if ($i == "\"Titulacion\"") titulacion = i; if ($i == "\"Asignatura\"") asignatura = i; if ($i == "\"Codigo\"") codigo = i } } NR > 1 { print $centro"," $titulacion"," $asignatura"," $codigo }' BIBREC24.csv | tee bibrec24raw.csv
-
-(El procesado del fichero de entrada es más sencillo con el OpenOffice)
-
+# Para obtener el fichero js ejecutamos este comando y le añadimos `var asigObject = ` al principio.
 
 python code/create_json.py code/BIBREC23.csv code/bibrec23.json
+
+# Revisar el nombre del fichero dentro de `create_json.py`
