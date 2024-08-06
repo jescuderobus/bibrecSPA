@@ -143,6 +143,11 @@ label{
     color: black;
 }
 
+button{
+  margin: 0px;
+}
+
+
 .center {
     display: block;
     margin-left: auto;
@@ -230,4 +235,10 @@ label{
 
 label {
  padding-bottom: 50px;
+}
+
+.curso{
+  padding: 10px 0 0 0;
+  color:brown;
+  text-align: right;
 }
