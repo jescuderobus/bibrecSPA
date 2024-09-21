@@ -1,4 +1,15 @@
 <!DOCTYPE html>
+
+<!--
+Buscamos procesar los parametros de la URL para preseleccionar los valores en los selectores:
+
+http://127.0.0.1:3000/bibrec24_25v2.html?optone=E.T.S.+de+Arquitectura&opttwo=Grado+en+Fundamentos+de+Arquitectura&optthree=%282330001%29+Construcci%C3%B3n+1
+
+http://127.0.0.1:3000/bibrec24_25v2.html?optone=Facultad+de+Enfermer%C3%ADa%2C+Fisioterapia+y+Podolog%C3%ADa&opttwo=M%C3%A1ster+Un.en+Nuevas+Tendencias+Asistenciales+y+de+Investigaci%C3%B3n+en+CC.Salud
+
+
+-->
+
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -108,6 +119,10 @@
         for (var centro in asigObject) {
           centroSel.options[centroSel.options.length] = new Option(centro,centro);
         }
+
+// Si hay parametros GET en la URL, los procesamos
+if (window.location.search){
+
 // Se mandan parametros via URL
           // Leer los parámetros de la URL
           const urlParams = new URLSearchParams(window.location.search);
@@ -148,14 +163,28 @@
             const codigoAsig= selectedAsignatura.split(" ")[0].match(/\(([^)]+)\)/)[1];
             const nombreAsig= selectedAsignatura.split(" ").slice(1).join(" "); // desde 2 hasta el final
             console.log(selectedCentro + " -- " + selectedTitulacion + " -- " + selectedAsignatura + " -- " + codigoAsig + " -- " + nombreAsig);      
-             asignaturaSel.value = codigoAsig;
+            // asignamos selectedAsignatura al value y nombreAsig al texto, hacemos que sea la opción seleccionada
+            asignaturaSel.options[asignaturaSel.options.length] = new Option(nombreAsig, selectedAsignatura);
+            asignaturaSel.value = selectedAsignatura;  
+            
               var asignaturaSeleccionada = asignaturas.find(asig => asig.ca == selectedAsignatura);
               if (asignaturaSeleccionada) {
                   document.getElementById('curso').textContent = asignaturaSeleccionada.da + " (" + asignaturaSeleccionada.ca + ")";
               }
-          }
- 
-/*
+              // Ponemos el curso
+              var asignatura = codigoAsig;
+              var curso = asigObject[centroSel.value][titulacionSel.value].find(
+                (asig) => {
+                  return asignatura.includes(asig.ca);
+                    }
+                  ).an;
+                  document.getElementById("curso").innerHTML =
+                    "asignatura actualizada en el curso " + curso;
+
+              }
+            }
+            else {
+
         centroSel.onchange = function () {
           titulacionSel.length = 1; // remove all options bar first
           asignaturaSel.length = 1; // remove all options bar first
@@ -213,8 +242,8 @@
             asignaturaSel.onchange();
           }
         };
-      };
-*/
+      }};
+
       document
         .getElementById("asignaturaSel")
         .addEventListener("change", function () {
@@ -232,7 +261,7 @@
             "asignatura actualizada en el curso " + curso;
         });
 
-      };
+    
     </script>
 
     <!-- Estadísticas GA4 -->
@@ -274,10 +303,5 @@
     </footer>
   </body>
 </html>
-<!--
-
-http://127.0.0.1:3000/bibrec24_25v2.html?optone=E.T.S.+de+Arquitectura&opttwo=Grado+en+Fundamentos+de+Arquitectura&optthree=%282330001%29+Construcci%C3%B3n+1
 
 
-
--->
