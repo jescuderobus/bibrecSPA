@@ -28,13 +28,7 @@
         Accede a bibliografía recomendada en Fama, extraída de las guías
         docentes de la US.
       </p>
-      <select
-        name="optone"
-        id="centroSel"
-        size="1"
-        aria-label="Selecciona ya"
-        required
-      >
+      <select name="optone" id="centroSel" size="1" aria-label="Selecciona ya" required>
         <option value="" selected="selected">Selecciona tu centro</option>
       </select>
 
@@ -99,21 +93,69 @@
         titulacionSel.length = 1; // remove all options bar first
         asignaturaSel.length = 1; // remove all options bar first
         document.getElementById("curso").innerHTML = "";
-        window.onload();
+        window.open('bibrec24_25v2.html','_self');
       }
 
+
+
+
       window.onload = function () {
-        var centroSel = document.getElementById("centroSel"),
+          var centroSel = document.getElementById("centroSel"),
           titulacionSel = document.getElementById("titulacionSel"),
           asignaturaSel = document.getElementById("asignaturaSel");
 
 
         for (var centro in asigObject) {
-          centroSel.options[centroSel.options.length] = new Option(
-            centro,
-            centro
-          );
+          centroSel.options[centroSel.options.length] = new Option(centro,centro);
         }
+// Se mandan parametros via URL
+          // Leer los parámetros de la URL
+          const urlParams = new URLSearchParams(window.location.search);
+          const selectedCentro = urlParams.get('optone');
+          const selectedTitulacion = urlParams.get('opttwo');
+          let selectedAsignatura = urlParams.get('optthree');
+
+          
+
+          // Preseleccionar el centro si está en la URL
+          if (selectedCentro) {
+              console.log(selectedCentro);
+              centroSel.value = selectedCentro;
+              // Llenar el select de titulaciones
+              for (var titulacion in asigObject[selectedCentro]) {
+                  titulacionSel.options[titulacionSel.options.length] = new Option(titulacion, titulacion);
+              }
+              
+          }
+
+          // Preseleccionar la titulación si está en la URL
+          if (selectedTitulacion) {
+            console.log(selectedCentro + " -- " + selectedTitulacion);
+            titulacionSel.value = selectedTitulacion;
+              // Llenar el select de asignaturas
+              var asignaturas = asigObject[selectedCentro][selectedTitulacion];
+              for (var i = 0; i < asignaturas.length; i++) {
+                  var asig = asignaturas[i];
+                  asignaturaSel.options[asignaturaSel.options.length] = new Option(asig.da, asig.ca);
+              }
+              
+          }
+
+          // Preseleccionar la asignatura si está en la URL
+          if (selectedAsignatura) {
+            console.log(selectedCentro + " -- " + selectedTitulacion + " -- " + selectedAsignatura);
+            // selectedAsignatura se compone de dos valores, codigo de asignatura y nombre de asignatura
+            const codigoAsig= selectedAsignatura.split(" ")[0].match(/\(([^)]+)\)/)[1];
+            const nombreAsig= selectedAsignatura.split(" ").slice(1).join(" "); // desde 2 hasta el final
+            console.log(selectedCentro + " -- " + selectedTitulacion + " -- " + selectedAsignatura + " -- " + codigoAsig + " -- " + nombreAsig);      
+             asignaturaSel.value = codigoAsig;
+              var asignaturaSeleccionada = asignaturas.find(asig => asig.ca == selectedAsignatura);
+              if (asignaturaSeleccionada) {
+                  document.getElementById('curso').textContent = asignaturaSeleccionada.da + " (" + asignaturaSeleccionada.ca + ")";
+              }
+          }
+ 
+/*
         centroSel.onchange = function () {
           titulacionSel.length = 1; // remove all options bar first
           asignaturaSel.length = 1; // remove all options bar first
@@ -140,7 +182,10 @@
           }
         };
 
+
+   
         centroSel.onchange(); // reset in case page is reloaded
+
         titulacionSel.onchange = function () {
           asignaturaSel.length = 1; // remove all options bar first
 
@@ -169,7 +214,7 @@
           }
         };
       };
-
+*/
       document
         .getElementById("asignaturaSel")
         .addEventListener("change", function () {
@@ -186,6 +231,8 @@
           document.getElementById("curso").innerHTML =
             "asignatura actualizada en el curso " + curso;
         });
+
+      };
     </script>
 
     <!-- Estadísticas GA4 -->
@@ -227,3 +274,10 @@
     </footer>
   </body>
 </html>
+<!--
+
+http://127.0.0.1:3000/bibrec24_25v2.html?optone=E.T.S.+de+Arquitectura&opttwo=Grado+en+Fundamentos+de+Arquitectura&optthree=%282330001%29+Construcci%C3%B3n+1
+
+
+
+-->
