@@ -18,3 +18,12 @@ Que personalizado para nuestro entorno sería:
 Si el fichero no existe puede que sea recomendable crearlo vacio previamente.
 
 
+## Versiones
+
+bibrec24_25v2.html --> recoge parámetros via GET para hacer consultas predeterminadas
+
+https://biblus.us.es/bib2/bibrec/index.php?palabra=Grado+en+Ingenier%C3%ADa+Aeroespacial&varbusqueda=titulacion&buscador=Buscar&tipo=todo&termino=Grado+en+Ingenier%C3%ADa+Aeroespacial
+
+http://127.0.0.1:3000/index.html?optone=E.T.S.+de+Ingenier%C3%ADa&opttwo=Grado+en+Ingenier%C3%ADa+Aeroespacial
+
+
