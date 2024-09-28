@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+
+<!--
+versión que intenta crear enlace a Programas/Proyectos docentes de la US
+
+http://127.0.0.1:3000/bibrec24_25v3.html?codcentro=E.T.S.+de+Arquitectura&titulacion=Grado+en+Fundamentos+de+Arquitectura&asignatura=%282330001%29+Construcci%C3%B3n+1
+
+https://sevius4.us.es/index.php?PyP=LISTA&codcentro=15&titulacion=233&asignatura=2330001 (Pese a que hay libros en FAMA como Bibliografia Recomendada  no los hay en los planes de las asignaturas)
+
+//---------------------------------//
+
+https://sevius4.us.es/index.php?PyP=LISTA
+
+51900011 - Elasticidad de un master
+
+
+-->
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>
+      BibRec 24/25. Bibliografía Recomendada para las asignaturas de la US.
+    </title>
+    <link rel="stylesheet" href="style/style.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
+
+  <body>
+    <header>
+      <map name="logo-bibus">
+        <area
+          shape="rect"
+          coords="0,0,140,69"
+          alt="logo"
+          href="https://bib.us.es/"
+          style="outline: none"
+          target="_blank"
+        />
+      </map>
+    </header>
+
+    <form name="bibrec" id="bibRec">
+      <p>
+        Accede a bibliografía recomendada en Fama, extraída de las guías
+        docentes de la US.
+      </p>
+      <select
+        name="codcentro"
+        id="centroSel"
+        size="1"
+        aria-label="Selecciona ya"
+        required
+      >
+        <option value="" selected="selected">Selecciona tu centro</option>
+      </select>
+
+      <select name="titulacion" id="titulacionSel" size="1" required>
+        <option value="" selected="selected">
+          Por favor, selecciona el centro primero
+        </option>
+      </select>
+
+      <select name="asignatura" id="asignaturaSel" size="1" required>
+        <option value="" selected="selected">
+          Por favor, selecciona la titulación primero
+        </option>
+      </select>
+
+      <span style="display: inline">
+        <label
+          ><input type="checkbox" id="cboxElec" /> Mostrar sólo recursos
+          electrónicos</label
+        ><br /><br />
+      </span>
+      <span style="display: inline">
+        <button onclick="clearSel();" class="limpiar">Limpiar</button>
+        <button
+          onclick="goSel(asignaturaSel.value,cboxElec.checked)"
+          class="consultar"
+          aria-label="Consultar, o selecciona limpiar para hacer otra elección"
+        >
+          Consultar
+        </button>
+      </span>
+      <div class="curso">
+        <span id="curso"></span>
+      </div>
+      <div class="programa"> <!--Aqui iria el enlace a la página de la asignatura de programas y proyectos docentes-->
+        <span id="programa"></span>
+      </div>
+    </form>
+    <script src="js/bibrec24_25v1.js"></script>
+
+    <script>
+      function goSel(asignatura, soloRecursosElectronicos) {
+        if (soloRecursosElectronicos) {
+          var url_fama =
+            "https://fama.us.es/discovery/search?query=any,contains," +
+            asignatura +
+            "&tab=all_data_not_idus&search_scope=all_data_not_idus&vid=34CBUA_US:VU1&facet=tlevel,include,online_resources&offset=0";
+        } else {
+          var url_fama =
+            "https://fama.us.es/discovery/search?query=any,contains," +
+            asignatura +
+            "&tab=all_data_not_idus&search_scope=all_data_not_idus&vid=34CBUA_US:VU1&lang=es&offset=0";
+        }
+        //alert(asignatura+"---"+soloRecursosElectronicos);
+        if (!asignatura) {
+          // strValue was empty string, false, 0, null, undefined, ...
+          clearSel();
+        } else {
+          window.open(url_fama, "_blank");
+        }
+        // clearSel();
+      }
+
+      function clearSel() {
+        centroSel.querySelectorAll('option')[0].selected = true;
+        titulacionSel.length = 1; // remove all options bar first
+        asignaturaSel.length = 1; // remove all options bar first
+      }
+
+
+
+      window.onload = function () {
+
+
+        var centroSel = document.getElementById("centroSel"),
+          titulacionSel = document.getElementById("titulacionSel"),
+          asignaturaSel = document.getElementById("asignaturaSel");
+
+        for (var centro in asigObject) {
+          centroSel.options[centroSel.options.length] = new Option(
+            centro,
+            centro
+          );
+        }
+
+        if (window.location.search) {
+          // Se mandan parametros via URL
+          // Leer los parámetros de la URL
+          const urlParams = new URLSearchParams(window.location.search);
+          const selectedCentro = urlParams.get("codcentro");
+          const selectedTitulacion = urlParams.get("titulacion");
+          let selectedAsignatura = urlParams.get("asignatura");
+
+          // Preseleccionar el centro si está en la URL
+          if (selectedCentro) {
+            // console.log(selectedCentro);
+            centroSel.value = selectedCentro;
+            // Llenar el select de titulaciones
+            for (var titulacion in asigObject[selectedCentro]) {
+              titulacionSel.options[titulacionSel.options.length] = new Option(
+                titulacion,
+                titulacion
+              );
+            }
+          }
+
+          // Preseleccionar la titulación si está en la URL
+          if (selectedTitulacion) {
+            // console.log(selectedCentro + " -- " + selectedTitulacion);
+            titulacionSel.value = selectedTitulacion;
+            // Llenar el select de asignaturas
+            var asignaturas = asigObject[selectedCentro][selectedTitulacion];
+            for (var i = 0; i < asignaturas.length; i++) {
+              var asig = asignaturas[i];
+              asignaturaSel.options[asignaturaSel.options.length] = new Option(
+                asig.da,
+                "("+asig.ca+") "+asig.da
+              );
+            }
+          }
+
+          // Preseleccionar la asignatura si está en la URL
+          if (selectedAsignatura) {
+            // console.log(
+            //   selectedCentro +
+            //     " -- " +
+            //     selectedTitulacion +
+            //     " -- " +
+            //     selectedAsignatura
+            // );
+            // selectedAsignatura se compone de dos valores, codigo de asignatura y nombre de asignatura
+            const codigoAsig = selectedAsignatura
+              .split(" ")[0]
+              .match(/\(([^)]+)\)/)[1];
+            const nombreAsig = selectedAsignatura.split(" ").slice(1).join(" "); // desde 2 hasta el final
+            // console.log(
+            //   selectedCentro +
+            //     " -- " +
+            //     selectedTitulacion +
+            //     " -- " +
+            //     selectedAsignatura +
+            //     " -- " +
+            //     codigoAsig +
+            //     " -- " +
+            //     nombreAsig
+            // );
+            // asignamos selectedAsignatura al value y nombreAsig al texto, hacemos que sea la opción seleccionada
+            asignaturaSel.options[asignaturaSel.options.length] = new Option(
+              nombreAsig,
+              selectedAsignatura
+            );
+            asignaturaSel.value = selectedAsignatura;
+
+            var asignaturaSeleccionada = asignaturas.find(
+              (asig) => asig.ca == selectedAsignatura
+            );
+            if (asignaturaSeleccionada) {
+              document.getElementById("curso").textContent =
+                asignaturaSeleccionada.da +
+                " (" +
+                asignaturaSeleccionada.ca +
+                ")";
+            }
+            // Ponemos el curso
+            var asignatura = codigoAsig;
+            var curso = asigObject[centroSel.value][titulacionSel.value].find(
+              (asig) => {
+                return asignatura.includes(asig.ca);
+              }
+            ).an;
+            document.getElementById("curso").innerHTML =
+              "asignatura actualizada en el curso " + curso;
+          }
+        }
+      
+        centroSel.onchange = function () {
+          titulacionSel.length = 1; // remove all options bar first
+          asignaturaSel.length = 1; // remove all options bar first
+
+          document.getElementById("curso").innerHTML = "";
+
+          if (this.selectedIndex < 1) {
+            titulacionSel.options[0].text =
+              "Por Favor, selecciona el centro primero";
+            asignaturaSel.options[0].text =
+              "Por Favor, selecciona la titulación primero";
+            return; // done
+          }
+          titulacionSel.options[0].text = "Por Favor, selecciona la titulación";
+          for (var titulacion in asigObject[this.value]) {
+            titulacionSel.options[titulacionSel.options.length] = new Option(
+              titulacion,
+              titulacion
+            );
+          }
+          if (titulacionSel.options.length == 2) {
+            titulacionSel.selectedIndex = 1;
+            titulacionSel.onchange();
+          }
+        };
+
+        // centroSel.onchange(); // reset in case page is reloaded
+
+        titulacionSel.onchange = function () {
+          asignaturaSel.length = 1; // remove all options bar first
+
+          document.getElementById("curso").innerHTML = "";
+
+          if (this.selectedIndex < 1) {
+            asignaturaSel.options[0].text =
+              "Por Favor, selecciona la titulación primero";
+            return; // done
+          }
+          asignaturaSel.options[0].text = "Por Favor, selecciona la asignatura";
+
+          var asignaturas = asigObject[centroSel.value][this.value];
+
+          for (var i = 0; i < asignaturas.length; i++) {
+            // Option (cadena indicativa, value)
+            asignaturaSel.options[asignaturaSel.options.length] = new Option(
+              asignaturas[i]["da"],
+              "(" + asignaturas[i]["ca"] + ") " + asignaturas[i]["da"]
+            );
+          }
+
+          if (asignaturaSel.options.length == 2) {
+            asignaturaSel.selectedIndex = 1;
+            asignaturaSel.onchange();
+          }
+        };
+      };
+
+      asignaturaSel = document.getElementById("asignaturaSel");
+
+function manejarCambioAsignatura () {
+          // cuando se selecciona una asignatura quiero mostrar el curso en id="curso"
+          var asignatura = document.getElementById("asignaturaSel").value;
+          // de la asignatura me quiero quedar con el numero que esta entre parentesis
+          var codAsig = asignatura.match(/\(([^)]+)\)/)[1];
+          // Ahora que tengo el codigo de asignatura, busco el curso en el objeto asigObject
+          var curso = asigObject[centroSel.value][titulacionSel.value].find(
+            (asig) => {
+              return asignatura.includes(asig.ca);
+            }
+          ).an;
+          document.getElementById("curso").innerHTML =
+            "asignatura actualizada en el curso " + curso;
+
+// Vamos a crear el enlace a la página de la asignatura de programas y proyectos docentes
+
+const centros = [
+    { nombre: "Centro Internacional", codigo: "901" },
+    { nombre: "Escuela Internacional de Doctorado", codigo: "298" },
+    { nombre: "Escuela Internacional de Posgrado", codigo: "302" },
+    { nombre: "Escuela Politécnica Superior", codigo: "23" },
+    { nombre: "E.T.S. de Arquitectura", codigo: "15" },
+    { nombre: "E.T.S. de Ingeniería", codigo: "45" },
+    { nombre: "E.T.S. de Ingeniería Agronómica", codigo: "9" },
+    { nombre: "E.T.S. de Ingeniería de Edificación", codigo: "98" },
+    { nombre: "E.T.S. Ingeniería Informática", codigo: "3" },
+    { nombre: "Facultad de Bellas Artes", codigo: "21" },
+    { nombre: "Facultad de Biología", codigo: "5" },
+    { nombre: "Facultad de CC. Económ. y Empresariales", codigo: "1" },
+    { nombre: "Facultad de Ciencias de la Educación", codigo: "18" },
+    { nombre: "Facultad de Ciencias del Trabajo", codigo: "8" },
+    { nombre: "Facultad de Comunicación", codigo: "2" },
+    { nombre: "Facultad de Derecho", codigo: "20" },
+    { nombre: "Facultad de Enfermería, Fisioterapia y Podología", codigo: "11" },
+    { nombre: "Facultad de Farmacia", codigo: "19" },
+    { nombre: "Facultad de Filología", codigo: "16" },
+    { nombre: "Facultad de Filosofía", codigo: "12" },
+    { nombre: "Facultad de Física", codigo: "6" },
+    { nombre: "Facultad de Geografía e Historia", codigo: "4" },
+    { nombre: "Facultad de Matemáticas", codigo: "17" },
+    { nombre: "Facultad de Medicina", codigo: "14" },
+    { nombre: "Facultad de Odontología", codigo: "10" },
+    { nombre: "Facultad de Psicología", codigo: "13" },
+    { nombre: "Facultad de Química", codigo: "22" },
+    { nombre: "Facultad de Turismo y Finanzas", codigo: "7" },
+    { nombre: "Oficina de Estudios de Posgrado", codigo: "900" },
+    { nombre: "Vicerrect.Investig.Direcc.Stdo.Doctorado", codigo: "90" }
+  ];
+
+  function obtenerCodigoCentro(nombreCentro) {
+    const centro = centros.find(c => c.nombre === nombreCentro);
+    return centro ? centro.codigo : null;
+  }
+
+          var url_codcentro= obtenerCodigoCentro(centroSel.value);
+          var url_asignatura=codAsig;
+
+          // si codAsig es 2330001, url_titulacion será 233
+          // si codAsig es 52330001, url_titulacion será M233
+
+          if (codAsig.length == 8) {
+            var url_titulacion = "M" + codAsig.substring(1, 4);
+          } else {
+            var url_titulacion = codAsig.substring(0, 3);
+          }
+
+
+          document.getElementById("programa").innerHTML =
+            "<a href='https://sevius4.us.es/index.php?PyP=LISTA&codcentro="+url_codcentro+"&titulacion="+url_titulacion+"&asignatura="+url_asignatura+"' target='_blank'>" + url_codcentro + " / " + url_titulacion + " / " +  url_asignatura + "</a>";
+
+        }
+
+        asignaturaSel.addEventListener("change", manejarCambioAsignatura);
+
+        window.addEventListener("load", function () {
+          if (asignaturaSel.value) {
+            manejarCambioAsignatura();
+          }
+        });
+
+    </script>
+
+    <!-- Estadísticas GA4 -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-8DFZHHVH7F"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+      gtag("config", "G-8DFZHHVH7F");
+    </script>
+
+    <footer class="footer">
+      <div class="button" onclick="window.open('https://bib.us.es')">
+        Web de la Biblioteca
+      </div>
+      <div
+        class="button"
+        onclick="window.open('https://bib.us.es/utiliza_la_biblioteca/tramites')"
+      >
+        Solicitud de compra
+      </div>
+      <div
+        class="button"
+        onclick="window.open('https://bib.us.es/busca_y_encuentra/incidencias_br')"
+      >
+        Contacto
+      </div>
+      <div
+        class="button"
+        onclick="window.open('https://bib.us.es/busca_y_encuentra/ayuda_bibrec')"
+      >
+        Ayuda
+      </div>
+    </footer>
+  </body>
+</html>
